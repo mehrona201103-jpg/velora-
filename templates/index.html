@@ -1,0 +1,235 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Для Ханифы ❤️</title>
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Caveat:wght@500;700&display=swap');
+        
+        body {
+            margin: 0;
+            padding: 0;
+            background-color: #ffe6e6;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            min-height: 100vh;
+            font-family: 'Arial', sans-serif;
+            overflow: hidden;
+        }
+
+        /* Экран с сердечком */
+        #intro-screen {
+            text-align: center;
+            transition: opacity 1s ease;
+        }
+
+        .heart-container {
+            position: relative;
+            width: 150px;
+            height: 150px;
+            margin: 0 auto;
+            cursor: pointer;
+        }
+
+        .heart {
+            font-size: 150px;
+            color: white;
+            text-shadow: 0 0 10px rgba(255, 0, 0, 0.3);
+            position: absolute;
+            top: -20px;
+            left: 0;
+            z-index: 1;
+        }
+
+        .heart-fill {
+            font-size: 150px;
+            color: #ff3366;
+            position: absolute;
+            top: -20px;
+            left: 0;
+            z-index: 2;
+            clip-path: polygon(0 100%, 100% 100%, 100% 100%, 0 100%);
+            transition: clip-path 3s ease-in-out;
+        }
+
+        .click-text {
+            margin-top: 50px;
+            font-size: 20px;
+            color: #ff3366;
+            font-weight: bold;
+            opacity: 0;
+            transition: opacity 0.5s;
+        }
+
+        /* Экран с письмом */
+        #letter-screen {
+            display: none;
+            background: white;
+            padding: 30px;
+            border-radius: 15px;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.1);
+            max-width: 400px;
+            width: 90%;
+            text-align: center;
+            opacity: 0;
+            transition: opacity 1s ease;
+        }
+
+        .letter-text {
+            font-family: 'Caveat', cursive;
+            font-size: 24px;
+            line-height: 1.5;
+            color: #333;
+            text-align: left;
+            margin-bottom: 30px;
+        }
+
+        /* Рейтинг */
+        .rating-title {
+            font-size: 18px;
+            color: #555;
+            margin-bottom: 10px;
+        }
+
+        .stars {
+            display: flex;
+            justify-content: center;
+            gap: 5px;
+            margin-bottom: 20px;
+            cursor: pointer;
+        }
+
+        .star {
+            font-size: 30px;
+            color: #ddd;
+            transition: color 0.2s;
+        }
+
+        .star.active {
+            color: #ff3366;
+        }
+
+        /* Кнопка TikTok */
+        #tiktok-btn {
+            display: none;
+            background-color: #000;
+            color: #fff;
+            border: none;
+            padding: 12px 20px;
+            border-radius: 8px;
+            font-size: 16px;
+            font-weight: bold;
+            cursor: pointer;
+            width: 100%;
+            transition: transform 0.2s;
+        }
+
+        #tiktok-btn:active {
+            transform: scale(0.95);
+        }
+    </style>
+</head>
+<body>
+
+    <!-- Экран загрузки сердечка -->
+    <div id="intro-screen">
+        <div class="heart-container" onclick="openLetter()">
+            <div class="heart">❤</div>
+            <div class="heart-fill" id="heart-fill">❤</div>
+        </div>
+        <div class="click-text" id="click-text">Нажми на сердечко ✨</div>
+    </div>
+
+    <!-- Письмо -->
+    <div id="letter-screen">
+        <div class="letter-text">
+            Дорогая Ханифа! ❤️<br><br>
+            Ты — самый яркий лучик света в моей жизни. Я безумно ценю каждую минуту нашего общения, наши шутки и ту поддержку, которую ты всегда даришь.<br><br>
+            Найти такую лучшую подругу — это настоящая удача. Оставайся всегда такой же потрясающей, искренней и доброй.<br><br>
+            Я тебя очень люблю!
+        </div>
+        
+        <div class="rating-title">Оцени открытку от 1 до 10:</div>
+        <div class="stars" id="stars-container">
+            <!-- Звездочки сгенерируются через JS -->
+        </div>
+
+        <button id="tiktok-btn" onclick="shareToTikTok()">Поделиться в TikTok 🎵</button>
+    </div>
+
+    <script>
+        // Анимация наполнения сердечка при загрузке
+        window.onload = () => {
+            setTimeout(() => {
+                document.getElementById('heart-fill').style.clipPath = 'polygon(0 0, 100% 0, 100% 100%, 0 100%)';
+            }, 500);
+
+            setTimeout(() => {
+                document.getElementById('click-text').style.opacity = '1';
+            }, 3500);
+        };
+
+        // Открытие письма
+        function openLetter() {
+            const intro = document.getElementById('intro-screen');
+            const letter = document.getElementById('letter-screen');
+
+            intro.style.opacity = '0';
+            setTimeout(() => {
+                intro.style.display = 'none';
+                letter.style.display = 'block';
+                setTimeout(() => {
+                    letter.style.opacity = '1';
+                }, 50);
+            }, 1000);
+        }
+
+        // Логика рейтинга
+        const starsContainer = document.getElementById('stars-container');
+        let selectedRating = 0;
+
+        for (let i = 1; i <= 10; i++) {
+            const star = document.createElement('div');
+            star.classList.add('star');
+            star.innerHTML = '❤';
+            star.dataset.value = i;
+            
+            star.addEventListener('click', (e) => {
+                selectedRating = parseInt(e.target.dataset.value);
+                updateStars(selectedRating);
+                document.getElementById('tiktok-btn').style.display = 'block';
+            });
+
+            starsContainer.appendChild(star);
+        }
+
+        function updateStars(rating) {
+            const stars = document.querySelectorAll('.star');
+            stars.forEach(star => {
+                if (parseInt(star.dataset.value) <= rating) {
+                    star.classList.add('active');
+                } else {
+                    star.classList.remove('active');
+                }
+            });
+        }
+
+        // Отправка в TikTok
+        function shareToTikTok() {
+            // Формируем текст
+            const text = `Я прочитала письмо и оценила открытку на ${selectedRating} из 10 сердечек! ❤️`;
+            
+            // Копируем текст в буфер обмена
+            navigator.clipboard.writeText(text).then(() => {
+                alert("Текст с оценкой скопирован! Сейчас откроется TikTok, вставь этот текст в чат.");
+                // Открываем TikTok (ссылка перенаправит в приложение на телефоне)
+                window.location.href = "https://www.tiktok.com/";
+            }).catch(err => {
+                alert("Ошибка копирования. Оценка: " + selectedRating);
+            });
+        }
+    </script>
+</body>
+</html>
